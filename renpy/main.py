@@ -313,29 +313,14 @@ def android_searchpath():
 
     # The public android directory.
     if "ANDROID_PUBLIC" in os.environ:
+        basedir = os.environ['ANDROID_PUBLIC']
         android_game = os.path.join(os.environ["ANDROID_PUBLIC"], "game")
 
         if os.path.exists(android_game):
             renpy.config.searchpath.insert(0, android_game)
-
-    # Asset packs.
-    packs = [
-        "ANDROID_PACK_FF1",
-        "ANDROID_PACK_FF2",
-        "ANDROID_PACK_FF3",
-        "ANDROID_PACK_FF4",
-    ]
-
-    for i in packs:
-        if i not in os.environ:
-            continue
-
-        assets = os.environ[i]
-
-        for i in [ "renpy/common", "game" ]:
-            dn = os.path.join(assets, i)
-            if os.path.isdir(dn):
-                renpy.config.searchpath.append(dn)
+            sys.path.append(android_game)
+            renpy.config.gamedir = android_game
+            renpy.config.basedir = basedir
 
     print("Android search paths:" , " ".join(renpy.config.searchpath))
 
