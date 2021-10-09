@@ -219,12 +219,13 @@ def choose_variants():
         diag = math.hypot(info.current_w, info.current_h) / android.get_dpi()
         print("Screen diagonal is", diag, "inches.")
 
-        if diag >= 6:
+        if os.environ.get("JOIPLAY_VARIANT_PHONE","0") == "1":
+             renpy.config.variants.insert(0, 'phone')
+             renpy.config.variants.insert(0, 'small')
+        else:
             renpy.config.variants.insert(0, 'tablet')
             renpy.config.variants.insert(0, 'medium')
-        else:
-            renpy.config.variants.insert(0, 'phone')
-            renpy.config.variants.insert(0, 'small')
+ 
 
     elif renpy.ios:
         renpy.config.variants.insert(0, 'mobile')
@@ -511,6 +512,22 @@ def main():
 
     if renpy.game.args.savedir: # @UndefinedVariable
         renpy.config.savedir = renpy.game.args.savedir # @UndefinedVariable
+        
+    if os.environ.get("JOIPLAY_HW_VIDEO","0") == "1":
+        print("HW video is enabled")
+        renpy.config.hw_video = True
+    else:
+        print("HW video is disabled")
+        renpy.config.hw_video = False
+        
+    if os.environ.get("JOIPLAY_AUTOSAVE","0") == "1":
+        print("Autosave is enabled")
+        renpy.config.autosave_on_choice = True
+    else:
+        print("Autosave is disabled")
+        renpy.config.autosave_on_choice = False
+        
+    renpy.config.savedir = os.environ.get("JOIPLAY_SAVEDIR",__main__.path_to_saves(renpy.config.gamedir))
 
     # Init preferences.
     game.persistent = renpy.persistent.init()
