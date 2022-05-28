@@ -321,6 +321,12 @@ def android_searchpath():
             sys.path.append(android_game)
             renpy.config.gamedir = android_game
             renpy.config.basedir = basedir
+    
+    if "ANDROID_EXTRAS" in os.environ:
+        android_extras = os.environ["ANDROID_EXTRAS"]
+        if os.path.exists(android_extras):
+            renpy.config.searchpath.append(android_extras)
+            sys.path.append(android_extras)
 
     print("Android search paths:" , " ".join(renpy.config.searchpath))
 
