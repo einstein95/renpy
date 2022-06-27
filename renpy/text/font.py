@@ -655,7 +655,10 @@ def load_face(fn):
                     break
 
     if font_file is None:
-        raise Exception("Could not find font {0!r}.".format(orig_fn))
+        try:
+            font_file = renpy.loaded.load('DejaVuSans.ttf')
+        except IOError:
+            raise Exception("Could not find font {0!r}.".format(orig_fn))
 
     rv = ftfont.FTFace(font_file, index, orig_fn) # @UndefinedVariable
 
