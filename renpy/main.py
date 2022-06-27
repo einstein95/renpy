@@ -612,6 +612,8 @@ def main():
         renpy.audio.audio.register_channel("joimovie", mixer='music', movie=True, loop=False)
 
         # Check some environment variables.
+        renpy.config.gl2 = "RENPY_DONT_USE_GL2" not in os.environ
+        renpy.display.render.models = "RENPY_DONT_USE_GL2" not in os.environ
         renpy.game.less_memory = "RENPY_LESS_MEMORY" in os.environ
         renpy.game.less_mouse = "RENPY_LESS_MOUSE" in os.environ
         renpy.game.less_updates = "RENPY_LESS_UPDATES" in os.environ
