@@ -1092,3 +1092,6 @@ label _console:
 
 label _console_return:
     return
+
+init -1010 python:
+    config.per_frame_screens.append("_trace_screen")
