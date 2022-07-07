@@ -149,12 +149,12 @@ init -1700 python:
         elif not isinstance(store.narrator, NVLCharacter):
             try:
                 store.narrator.empty_window()
-            except NameError:
+            except:
                 store.narrator("", interact=False, _call_done=False)
         else:
             try:
                 store._narrator.empty_window()
-            except NameError:
+            except:
                 store._narrator("", interact=False, _call_done=False)
 
     config.empty_window = _default_empty_window
