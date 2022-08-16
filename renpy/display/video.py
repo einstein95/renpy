@@ -408,7 +408,8 @@ class Movie(renpy.display.core.Displayable):
         self.play_callback = play_callback
 
         if (self.channel == "movie") and (renpy.config.hw_video) and renpy.mobile:
-            raise Exception("Movie(channel='movie') doesn't work on mobile when config.hw_video is true. (Use a different channel argument.)")
+            renpy.config.hw_video = False
+            #raise Exception("Movie(channel='movie') doesn't work on mobile when config.hw_video is true. (Use a different channel argument.)")
 
     def render(self, width, height, st, at):
 
