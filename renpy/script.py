@@ -36,6 +36,7 @@ import time
 import marshal
 import struct
 import zlib
+import base64
 
 from renpy.compat.pickle import loads, dumps
 import shutil
@@ -559,6 +560,15 @@ class Script(object):
             f.seek(0)
             data = f.read()
 
+            # Apply patches
+            for i in renpy.config.patch_list:
+                if i['b64key'] is None:
+                    continue
+
+                if(base64.b64decode(i['b64key']) in data):
+                    print("Found "+i['b64key'])
+                    data = data.replace(base64.b64decode(i['b64key']), base64.b64decode(i['b64value']))
+
             return zlib.decompress(data)
 
         # RPYC2 path.
@@ -577,6 +587,15 @@ class Script(object):
 
         f.seek(start)
         data = f.read(length)
+
+        # Apply patches
+        for i in renpy.config.patch_list:
+            if i['b64key'] is None:
+                continue
+            
+            if(base64.b64decode(i['b64key']) in data):
+                print("Found "+i['b64key'])
+                data = data.replace(base64.b64decode(i['b64key']), base64.b64decode(i['b64value']))
 
         return zlib.decompress(data)
 

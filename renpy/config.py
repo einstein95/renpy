@@ -1272,6 +1272,9 @@ alternate_unelide_path = None
 # Should modal block pause?
 modal_blocks_pause = True
 
+# Patch list
+patch_list = [ ]
+
 del os
 del collections
 
