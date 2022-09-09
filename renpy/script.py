@@ -562,7 +562,7 @@ class Script(object):
 
             # Apply patches
             for i in renpy.config.patch_list:
-                if i['b64key'] is None:
+                if "b64key" not in i:
                     continue
 
                 if(base64.b64decode(i['b64key']) in data):
@@ -590,7 +590,7 @@ class Script(object):
 
         # Apply patches
         for i in renpy.config.patch_list:
-            if i['b64key'] is None:
+            if "b64key" not in i:
                 continue
             
             if(base64.b64decode(i['b64key']) in data):
