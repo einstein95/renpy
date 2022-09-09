@@ -1275,6 +1275,9 @@ modal_blocks_pause = True
 # Should modal block timers?
 modal_blocks_timer = False
 
+# Patch list
+patch_list = [ ]
+
 del os
 del collections
 

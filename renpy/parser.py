@@ -248,6 +248,12 @@ def list_logical_lines(filename, filedata=None, linenumber=1, add_lines=False):
         with open(filename, "rb") as f:
             data = f.read().decode("utf-8", "python_strict")
 
+    # Apply patches
+    for i in renpy.config.patch_list:
+        if(i['key'] in data):
+            print("Found "+i['key'])
+            data = data.replace(i['key'], i['value'])
+
     filename = elide_filename(filename)
     prefix = munge_filename(filename)
 
