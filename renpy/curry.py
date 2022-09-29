@@ -107,6 +107,9 @@ class Partial(functools.partial):
             setattr(self, 'hash', _hash)
 
         return _hash
+    
+    def __name__(self):
+        return getattr(self.func, "__name__", None)
 
 
 def curry(fn):
