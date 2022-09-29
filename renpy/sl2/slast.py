@@ -427,12 +427,15 @@ class SLBlock(SLNode):
 
             # We use screen analysis object, since it
             # have all knowlege about our constants
-            self.atl_transform.mark_constant(analysis)
+            try:
+                self.atl_transform.mark_constant(analysis)
+            except:
+                self.atl_transform.mark_constant()
 
             # We can only be a constant if we do not rely
             # on screen arguments or other internal variables.
             # So we can pass an empty context for compilation.
-            if self.atl_transform.constant == GLOBAL_CONST:
+            if hasattr(self.atl_transform, 'compile_block') and self.atl_transform.constant == GLOBAL_CONST:
                 self.atl_transform.compile_block()
 
             # Check constant again after compilation try,

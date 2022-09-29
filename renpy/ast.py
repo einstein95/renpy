@@ -1237,7 +1237,10 @@ class Image(Node):
         if getattr(self, 'atl', None) is not None:
             # ATL images must participate with the game defined
             # constant names. So, we pass empty parameters to enable it.
-            self.atl.analyze(EMPTY_PARAMETERS)
+            if hasattr(self.atl, 'analyze'):
+                self.atl.analyze(EMPTY_PARAMETERS)
+            else:
+                self.atl.mark_constant()
 
 
 class Transform(Node):
@@ -1283,13 +1286,17 @@ class Transform(Node):
         setattr(renpy.store, self.varname, trans)
 
     def analyze(self):
-
         parameters = getattr(self, "parameters", None)
 
         if parameters is None:
             parameters = Transform.default_parameters
 
-        self.atl.analyze(parameters)
+        if hasattr(self.atl, 'analyze'):
+            self.atl.analyze(parameters)
+        else:
+            self.atl.mark_constant()
+
+        
 
 
 def predict_imspec(imspec, scene=False, atl=None):
@@ -1416,8 +1423,10 @@ class Show(Node):
             # ATL block defined for show, scene or show layer statements
             # must participate with the game defined constant names.
             # So, we pass empty parameters to enable it.
-            self.atl.analyze(EMPTY_PARAMETERS)
-
+            if hasattr(self.atl, 'analyze'):
+                self.atl.analyze(EMPTY_PARAMETERS)
+            else:
+                self.atl.mark_constant()
 
 class ShowLayer(Node):
 
@@ -1456,8 +1465,10 @@ class ShowLayer(Node):
 
     def analyze(self):
         if self.atl is not None:
-            self.atl.analyze(EMPTY_PARAMETERS)
-
+            if hasattr(self.atl, 'analyze'):
+                self.atl.analyze(EMPTY_PARAMETERS)
+            else:
+                self.atl.mark_constant()
 
 class Camera(Node):
 
@@ -1496,8 +1507,10 @@ class Camera(Node):
 
     def analyze(self):
         if self.atl is not None:
-            self.atl.analyze(EMPTY_PARAMETERS)
-
+            if hasattr(self.atl, 'analyze'):
+                self.atl.analyze(EMPTY_PARAMETERS)
+            else:
+                self.atl.mark_constant()
 
 class Scene(Node):
 
@@ -1550,7 +1563,10 @@ class Scene(Node):
 
     def analyze(self):
         if getattr(self, 'atl', None) is not None:
-            self.atl.analyze(EMPTY_PARAMETERS)
+            if hasattr(self.atl, 'analyze'):
+                self.atl.analyze(EMPTY_PARAMETERS)
+            else:
+                self.atl.mark_constant()
 
 
 class Hide(Node):

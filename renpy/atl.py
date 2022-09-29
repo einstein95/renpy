@@ -27,6 +27,8 @@ import random
 import renpy
 from renpy.pyanalysis import Analysis, NOT_CONST, GLOBAL_CONST
 
+#For backward compatibility
+is_constant_expr = Analysis(None).is_constant_expr
 
 def compiling(loc):
     file, number = loc # @ReservedAssignment
@@ -515,7 +517,7 @@ class ATLTransformBase(renpy.object.Object):
 
         old_exception_info = renpy.game.exception_info
 
-        if constant and self.atl.compiled_block is not None:
+        if constant and hasattr(self.atl, 'compiled_block') and self.atl.compiled_block is not None:
             block = self.atl.compiled_block
         else:
             block = self.atl.compile(self.context)
@@ -639,7 +641,7 @@ class RawStatement(object):
     # RawBlock also has an analysis method which creates an Analysis
     # object, applies passed parameters and calls mark_constant
 
-    def mark_constant(self, analysis):
+    def mark_constant(self, analysis=None):
         """
         Sets self.constant to GLOBAL_CONST if all expressions used in
         this statement and its children are constant.
@@ -734,7 +736,10 @@ class RawBlock(RawStatement):
         if parameters is not None:
             analysis.parameters(parameters)
 
-        self.mark_constant(analysis)
+        try:
+            self.mark_constant(analysis)
+        except:
+            self.mark_constant()
 
         # We can only be a constant if we do not use values
         # from parameters or do not have them at all.
@@ -756,13 +761,18 @@ class RawBlock(RawStatement):
         else:
             self.compiled_block = block
         renpy.game.exception_info = old_exception_info
-
-    def mark_constant(self, analysis):
+    
+    def mark_constant(self, analysis=None):
+        if analysis is None:
+            analysis = Analysis(None)
 
         constant = GLOBAL_CONST
 
         for i in self.statements:
-            i.mark_constant(analysis)
+            try:
+                i.mark_constant(analysis)
+            except:
+                i.mark_constant()
             constant = min(constant, i.constant)
 
         self.constant = constant
@@ -1035,7 +1045,10 @@ class RawMultipurpose(RawStatement):
 
         return Interpolation(self.loc, warper, duration, properties, self.revolution, circles, splines)
 
-    def mark_constant(self, analysis):
+    def mark_constant(self, analysis=None):
+        if analysis is None:
+            analysis = Analysis(None)
+
         constant = GLOBAL_CONST
         is_constant_expr = analysis.is_constant_expr
 
@@ -1090,7 +1103,9 @@ class RawContainsExpr(RawStatement):
         child = ctx.eval(self.expression)
         return Child(self.loc, child, None)
 
-    def mark_constant(self, analysis):
+    def mark_constant(self, analysis=None):
+        if analysis is None:
+            analysis = Analysis(None)
         self.constant = analysis.is_constant_expr(self.expression)
 
 
@@ -1117,12 +1132,17 @@ class RawChild(RawStatement):
 
         return Child(self.loc, box, None)
 
-    def mark_constant(self, analysis):
+    def mark_constant(self, analysis=None):
+        if analysis is None:
+            analysis = Analysis(None)
 
         constant = GLOBAL_CONST
 
         for i in self.children:
-            i.mark_constant(analysis)
+            try:
+                i.mark_constant(analysis)
+            except:
+                i.mark_constant()
             constant = min(constant, i.constant)
 
         self.constant = constant
@@ -1353,7 +1373,9 @@ class RawRepeat(RawStatement):
 
         return Repeat(self.loc, repeats)
 
-    def mark_constant(self, analysis):
+    def mark_constant(self, analysis=None):
+        if analysis is None:
+            analysis = Analysis(None)
         self.constant = analysis.is_constant_expr(self.repeats)
 
 
@@ -1385,11 +1407,17 @@ class RawParallel(RawStatement):
         for i in self.blocks:
             i.predict(ctx)
 
-    def mark_constant(self, analysis):
+    def mark_constant(self, analysis=None):
+        if analysis is None:
+            analysis = Analysis(None)
+
         constant = GLOBAL_CONST
 
         for i in self.blocks:
-            i.mark_constant(analysis)
+            try:
+                i.mark_constant(analysis)
+            except:
+                i.mark_constant()
             constant = min(constant, i.constant)
 
         self.constant = constant
@@ -1465,11 +1493,17 @@ class RawChoice(RawStatement):
         for _i, j in self.choices:
             j.predict(ctx)
 
-    def mark_constant(self, analysis):
+    def mark_constant(self, analysis=None):
+        if analysis is None:
+            analysis = Analysis(None)
+
         constant = GLOBAL_CONST
 
         for _chance, block in self.choices:
-            block.mark_constant(analysis)
+            try:
+                block.mark_constant(analysis)
+            except:
+                block.mark_constant()
             constant = min(constant, block.constant)
 
         self.constant = constant
@@ -1540,7 +1574,10 @@ class RawTime(RawStatement):
         compiling(self.loc)
         return Time(self.loc, ctx.eval(self.time))
 
-    def mark_constant(self, analysis):
+    def mark_constant(self, analysis=None):
+        if analysis is None:
+            analysis = Analysis(None)
+
         self.constant = analysis.is_constant_expr(self.time)
 
 
@@ -1581,11 +1618,17 @@ class RawOn(RawStatement):
         for i in self.handlers.values():
             i.predict(ctx)
 
-    def mark_constant(self, analysis):
+    def mark_constant(self, analysis=None):
+        if analysis is None:
+            analysis = Analysis(None)
+
         constant = GLOBAL_CONST
 
         for block in self.handlers.values():
-            block.mark_constant(analysis)
+            try:
+                block.mark_constant(analysis)
+            except:
+                block.mark_constant()
             constant = min(constant, block.constant)
 
         self.constant = constant
@@ -1696,7 +1739,7 @@ class RawEvent(RawStatement):
     def compile(self, ctx): # @ReservedAssignment
         return Event(self.loc, self.name)
 
-    def mark_constant(self, analysis):
+    def mark_constant(self, analysis=None):
         self.constant = GLOBAL_CONST
 
 
@@ -1722,7 +1765,10 @@ class RawFunction(RawStatement):
         compiling(self.loc)
         return Function(self.loc, ctx.eval(self.expr))
 
-    def mark_constant(self, analysis):
+    def mark_constant(self, analysis=None):
+        if analysis is None:
+            analysis = Analysis(None)
+
         self.constant = analysis.is_constant_expr(self.expr)
 
 
