@@ -600,6 +600,8 @@ dispatch_gesture = None
 # The table mapping gestures to events used by the default function.
 gestures = {
     "n_s_w_e_w_e" : "progress_screen",
+    "n" : "hide_windows",
+    "w" : "game_menu",
     }
 
 # Sizes of gesture components and strokes, as a fraction of screen_width.
@@ -1211,6 +1213,9 @@ relative_transform_size = True
 
 # Should tts of layers be from front to back?
 tts_front_to_back = False
+
+#A certain game needs this
+developer_show_all_exceptions = False
 
 # Should live2d loading be logged to log.txt
 log_live2d_loading = False
