@@ -152,6 +152,9 @@ init -1600 python:
         profile_once = [ 'K_F8' ],
         memory_profile = [ 'K_F7' ],
 
+        # Additions
+        mute = [ 'K_MUTE' ],
+
     )
 
     config.default_keymap = { k : _list(v) for k, v in config.keymap.items() }
@@ -395,6 +398,11 @@ init -1600 python:
 
         renpy.restart_interaction()
 
+    def _mute():
+        print("mute")
+        for mixer in renpy.game.preferences.get_all_mixers():
+            renpy.game.preferences.set_mute(mixer, not renpy.game.preferences.get_mute(mixer))
+
 screen _progress:
     $ new = renpy.count_newly_seen_dialogue_blocks()
     $ seen = renpy.count_seen_dialogue_blocks()
@@ -442,6 +450,7 @@ init -1100 python:
         performance = ToggleScreen("_performance"),
         accessibility = ToggleScreen("_accessibility"),
         bubble_editor = bubble.ToggleShown(),
+        mute = _mute,
         )
 
     config.underlay = [ _default_keymap ]
