@@ -475,7 +475,7 @@ def main():
     if renpy.game.args.savedir: # type: ignore
         renpy.config.savedir = renpy.game.args.savedir # type: ignore
 
-    renpy.config.savedir = os.environ.get("JOIPLAY_SAVEDIR",__main__.path_to_saves(renpy.config.gamedir))
+    renpy.config.savedir = os.environ.get("JOIPLAY_SAVEDIR", renpy.config.savedir)
 
     # Init the save token system.
     renpy.savetoken.init()
