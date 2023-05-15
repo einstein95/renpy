@@ -350,6 +350,14 @@ def main():
     renpy.config.commondir = renpy.__main__.path_to_common(renpy.config.renpy_base) # E1101 @UndefinedVariable
     renpy.config.searchpath = renpy.__main__.predefined_searchpath(renpy.config.commondir) # E1101 @UndefinedVariable
 
+    if "RENPY_PATCHPATH" in os.environ:
+        import json
+
+        with open(os.environ["RENPY_PATCHPATH"], 'r', encoding= 'utf-8') as pf:
+            patchdata = pf.read()
+            renpy.config.patch_list = json.loads(patchdata)['renpy']
+            print("Loaded "+str(len(renpy.config.patch_list))+" patches")
+
     # Load Ren'Py extensions.
     for dir in renpy.config.searchpath: # @ReservedAssignment
 
