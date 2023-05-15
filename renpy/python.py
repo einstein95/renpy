@@ -1119,6 +1119,8 @@ def py_exec_bytecode(bytecode, hide=False, globals=None, locals=None, store="sto
     if locals is None:
         locals = globals # @ReservedAssignment
 
+    locals["store"] = renpy.store.store
+
     exec(bytecode, globals, locals)
 
 
@@ -1132,6 +1134,8 @@ def py_exec(source, hide=False, store=None):
     else:
         locals = store # @ReservedAssignment
 
+    locals["store"] = renpy.store.store
+
     exec(py_compile(source, 'exec'), store, locals)
 
 
@@ -1142,6 +1146,8 @@ def py_eval_bytecode(bytecode, globals=None, locals=None): # @ReservedAssignment
 
     if locals is None:
         locals = globals # @ReservedAssignment
+
+    locals["store"] = renpy.store.store
 
     return eval(bytecode, globals, locals)
 
