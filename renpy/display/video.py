@@ -517,6 +517,9 @@ class Movie(renpy.display.displayable.Displayable):
 
         self.group = group
 
+        if (self.channel == "movie") and (renpy.config.hw_video) and renpy.mobile:
+            renpy.config.hw_video = False
+
     def _handles_event(self, event):
         return event == "show"
 
