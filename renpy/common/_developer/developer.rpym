@@ -40,10 +40,6 @@ screen _developer:
         fixed:
             vbox:
 
-                textbutton _("Interactive Director (D)"):
-                    action [ director.Start(), Hide("_developer") ]
-                textbutton _("Reload Game (Shift+R)"):
-                    action renpy.reload_script
                 textbutton _("Console (Shift+O)"):
                     action [ Hide("_developer"), _console.enter ]
                 textbutton _("Variable Viewer"):
