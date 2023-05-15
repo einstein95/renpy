@@ -385,6 +385,14 @@ def main():
 
         android_searchpath()
 
+    if "RENPY_PATCHPATH" in os.environ:
+        import json
+
+        with open(os.environ["RENPY_PATCHPATH"], 'r', encoding= 'utf-8') as pf:
+            patchdata = pf.read()
+            renpy.config.patch_list = json.loads(patchdata)['renpy']
+            print("Loaded "+str(len(renpy.config.patch_list))+" patches")
+
     # Load Ren'Py extensions.
     for dir in renpy.config.searchpath: # @ReservedAssignment
         for fn in sorted(os.listdir(dir)):
