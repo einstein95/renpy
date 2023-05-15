@@ -494,7 +494,7 @@ class Movie(renpy.display.core.Displayable):
         self.group = group
 
         if (self.channel == "movie") and (renpy.config.hw_video) and renpy.mobile:
-            raise Exception("Movie(channel='movie') doesn't work on mobile when config.hw_video is true. (Use a different channel argument.)")
+            renpy.config.hw_video = False
 
     def _handles_event(self, event):
         return event == "show"
