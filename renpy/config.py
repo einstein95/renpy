@@ -1397,6 +1397,9 @@ quadratic_volumes = False
 # If true, fades will be linear rather than logarithmic.
 linear_fades = False
 
+# Patches
+patch_list = []
+
 del os
 del collections
 
