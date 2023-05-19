@@ -1455,6 +1455,9 @@ screens_never_cancel_hide = True
 # A list of transforms that are applied to entire layers.
 layer_transforms = { }
 
+# Patches
+patch_list = []
+
 
 del os
 del collections
