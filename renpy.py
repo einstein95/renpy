@@ -238,27 +238,22 @@ def predefined_searchpath(commondir):
     if renpy.android:
         # The public android directory.
         if "ANDROID_PUBLIC" in os.environ:
-            android_game = os.path.join(os.environ["ANDROID_PUBLIC"], "game")
+            basedir = os.environ["ANDROID_PUBLIC"]
+            android_game = os.path.join(basedir, "game")
 
             if os.path.exists(android_game):
                 searchpath.insert(0, android_game)
 
-        # Asset packs.
-        packs = [
-            "ANDROID_PACK_FF1", "ANDROID_PACK_FF2",
-            "ANDROID_PACK_FF3", "ANDROID_PACK_FF4",
-        ]
+            sys.path.append(android_game)
+            renpy.config.gamedir = android_game
+            renpy.config.basedir = basedir
 
-        for i in packs:
-            if i not in os.environ:
-                continue
+        if "ANDROID_EXTRAS" in os.environ:
+            android_extras = os.environ["ANDROID_EXTRAS"]
+            if os.path.exists(android_extras):
+                renpy.config.searchpath.append(android_extras)
+                sys.path.append(android_extras)
 
-            assets = os.environ[i]
-
-            for i in [ "renpy/common", "game" ]:
-                dn = os.path.join(assets, i)
-                if os.path.isdir(dn):
-                    searchpath.append(dn)
     else:
         # Add path from env variable, if any
         if "RENPY_SEARCHPATH" in os.environ:
